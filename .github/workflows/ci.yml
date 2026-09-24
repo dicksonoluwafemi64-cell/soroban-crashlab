@@ -24,6 +24,20 @@ jobs:
       - uses: ./.github/actions/web-setup
       - run: pnpm --dir apps/web run lint
 
+  web-typecheck:
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/web-setup
+      - name: Typecheck build program
+        run: pnpm exec tsc -p tsconfig.json --noEmit
+      - name: Typecheck test program
+        run: pnpm exec tsc -p tsconfig.test.json --noEmit
+
   web-unit:
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
@@ -154,7 +168,7 @@ jobs:
       - run: bash -n scripts/contracts/build-soroban-example.sh
 
   e2e:
-    needs: [web-lint, web-unit, web-build]
+    needs: [web-lint, web-unit, web-build, web-typecheck]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 20
     defaults:
