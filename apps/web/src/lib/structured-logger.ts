@@ -64,7 +64,7 @@ export class StructuredLogger {
     try {
       const h = await headers();
       requestId = h.get('x-request-id') || undefined;
-    } catch (e) {
+    } catch {
       // not in a request context
     }
 

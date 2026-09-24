@@ -153,12 +153,12 @@ export function createRouteHandler<
   ) => Promise<Response>
 ) {
   return async (
-    request: Request,
-    context: { params?: Promise<Params> | Params }
+    request?: Request,
+    context?: { params?: Promise<Params> | Params }
   ): Promise<Response> => {
     const startTime = Date.now();
     try {
-      if (config.sizeLimit !== false) {
+      if (config.sizeLimit !== false && request) {
         const sizeConfig = typeof config.sizeLimit === 'object' ? config.sizeLimit : undefined;
         const sizeCheckError = checkRequestSize(request, sizeConfig);
         if (sizeCheckError) {
@@ -171,8 +171,8 @@ export function createRouteHandler<
         }
       }
 
-      let parsedBody: any = undefined;
-      if (config.bodySchema) {
+      let parsedBody: z.infer<BodySchema> | undefined = undefined;
+      if (config.bodySchema && request) {
         const bodyResult = await readJsonBody(request);
         if ('error' in bodyResult) return bodyResult.error as Response;
         
@@ -190,7 +190,7 @@ export function createRouteHandler<
         ? context.params 
         : Promise.resolve(context?.params ?? ({} as Params));
 
-      const response = await handler(request, {
+      const response = await handler(request ?? new Request('http://localhost'), {
         params: paramsPromise,
         body: parsedBody as z.infer<BodySchema>,
       });

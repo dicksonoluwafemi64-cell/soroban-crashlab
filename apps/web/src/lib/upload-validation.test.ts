@@ -164,7 +164,7 @@ describe('ingestion gate — rejections are auditable', () => {
       persisted,
       deleted,
       deps: {
-        fetchObject: async () => (body instanceof Response ? body : new Response(body)),
+        fetchObject: async () => (body instanceof Response ? body : new Response(new Uint8Array(body))),
         deleteStoredFile: async (key: string) => {
           deleted.push(key);
         },
