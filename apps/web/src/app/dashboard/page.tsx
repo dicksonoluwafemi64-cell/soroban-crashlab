@@ -35,6 +35,7 @@ import { TextReveal } from "../../components/scroll-effects/TextReveal";
 import { FuzzingRun } from "../types";
 import { useDataTableKeyboardNav } from "../use-data-table-keyboard-nav";
 import { sanitizeSearchParams } from "../../lib/sanitize";
+import ProductTourHost from "../components/ProductTourHost";
 
 const makeSuggestedLabels = (run: FuzzingRun): string[] => [
   run.area,
@@ -135,6 +136,7 @@ function DashboardContent() {
 
   return (
     <div className="container-full page-padding fade-in">
+      <ProductTourHost />
       <PullToRefreshIndicator isPulling={isPulling} isRefreshing={isRefreshing} pullDistance={pullDistance} />
       <TextReveal as="div">
         <PageHeader
@@ -142,7 +144,7 @@ function DashboardContent() {
           description="Fuzzing campaign overview"
           actions={
             <>
-              <Link href="/start" prefetch className="btn-primary text-xs sm:text-sm px-3 sm:px-6 h-9 sm:h-10">
+              <Link href="/start" prefetch data-tour="start-run" className="btn-primary text-xs sm:text-sm px-3 sm:px-6 h-9 sm:h-10">
                 Start a run
               </Link>
               <Link href="/runs" prefetch className="btn-outline text-xs sm:text-sm px-3 sm:px-6 h-9 sm:h-10">
@@ -155,7 +157,7 @@ function DashboardContent() {
 
       <div className="mt-4">
         <CoverflowCarousel>
-          <Link href="/runs" prefetch className="card card-padding min-w-[220px] card-interactive block">
+          <Link href="/runs" prefetch data-tour="nav-runs" className="card card-padding min-w-[220px] card-interactive block">
             <h4 className="font-semibold text-sm">Runs</h4>
             <p className="text-meta text-xs mt-1">Browse all fuzzing runs</p>
           </Link>
@@ -163,7 +165,7 @@ function DashboardContent() {
             <h4 className="font-semibold text-sm">Analytics</h4>
             <p className="text-meta text-xs mt-1">Clusters, heatmaps, trends</p>
           </Link>
-          <Link href="/triage" prefetch className="card card-padding min-w-[220px] card-interactive block">
+          <Link href="/triage" prefetch data-tour="triage" className="card card-padding min-w-[220px] card-interactive block">
             <h4 className="font-semibold text-sm">Triage</h4>
             <p className="text-meta text-xs mt-1">Kanban board for crashes</p>
           </Link>
@@ -208,7 +210,7 @@ function DashboardContent() {
 
       {dataState === "success" && (
         <PageSection className="mb-6">
-          <Link href="/analytics/clusters" className="card card-padding card-interactive block">
+          <Link href="/analytics/clusters" data-tour="clusters" className="card card-padding card-interactive block">
             <h2 className="heading-section">Failure Signature Clusters</h2>
             <p className="text-meta mt-1">Group repeated crashes by signature and open representative samples for triage.</p>
           </Link>
